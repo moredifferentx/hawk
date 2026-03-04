@@ -60,14 +60,16 @@ function buildSpotifyBlock() {
       clientId: "${escapeYaml(config.spotify.clientId)}"
       clientSecret: "${escapeYaml(config.spotify.clientSecret)}"
       countryCode: "US"
-      playlistLoadLimit: 6
-      albumLoadLimit: 6`;
+      playlistLoadLimit: 10
+      albumLoadLimit: 10`;
     }
     return `
     spotify:
       clientId: ""
       clientSecret: ""
-      countryCode: "US"`;
+      countryCode: "US"
+      playlistLoadLimit: 10
+      albumLoadLimit: 10`;
 }
 
 function buildAppleMusicBlock() {
@@ -76,12 +78,14 @@ function buildAppleMusicBlock() {
     applemusic:
       mediaAPIToken: "${escapeYaml(config.appleMusicToken)}"
       countryCode: "US"
-      playlistLoadLimit: 6
-      albumLoadLimit: 6`;
+      playlistLoadLimit: 10
+      albumLoadLimit: 10`;
     }
     return `
     applemusic:
-      countryCode: "US"`;
+      countryCode: "US"
+      playlistLoadLimit: 10
+      albumLoadLimit: 10`;
 }
 
 function buildDeezerBlock() {
@@ -113,7 +117,7 @@ lavalink:
       local: false
     bufferDurationMs: 400
     frameBufferDurationMs: 5000
-    youtubePlaylistLoadLimit: 6
+    youtubePlaylistLoadLimit: 100
     playerUpdateInterval: 5
     youtubeSearchEnabled: true
     soundcloudSearchEnabled: true
@@ -143,16 +147,29 @@ plugins:
     allowDirectVideoIds: true
     allowDirectPlaylistIds: true
     clients:
-      - MUSIC
       - TVHTML5EMBEDDED
-      - IOS
-      - WEB
+      - ANDROID_TESTSUITE
+      - WEB_EMBEDDED
+      - MUSIC
+      - ANDROID_MUSIC
+    # ──── VPS Authentication (uncomment ONE method) ────
+    # Method 1: OAuth (recommended for VPS) — run Lavalink once,
+    # follow the device-code link in logs, then paste refresh token:
+    # oauth:
+    #   enabled: true
+    #   refreshToken: "YOUR_REFRESH_TOKEN"
+    #
+    # Method 2: PoToken + VisitorData (alternative for VPS)
+    # Generate at: https://github.com/iv-org/youtube-trusted-session-generator
+    # pot:
+    #   token: "YOUR_PO_TOKEN"
+    #   visitorData: "YOUR_VISITOR_DATA"
 
   lavasrc:
     providers:
-      - 'scsearch:{title} {author}'
       - 'ytsearch:"{isrc}"'
       - 'ytsearch:{title} {author}'
+      - 'scsearch:{title} {author}'
 ${buildSpotifyBlock()}
 ${buildAppleMusicBlock()}
 ${buildDeezerBlock()}
